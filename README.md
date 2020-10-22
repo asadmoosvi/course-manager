@@ -4,7 +4,8 @@ Keep track of the courses you're taking with a current task and next task
 for each.
 
 # installation
-`pip install .`
+`pip install .` for the latest dev version or `pip install course-manager` for
+the stable release.
 
 # usage
 
