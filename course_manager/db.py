@@ -20,7 +20,7 @@ class CourseDb:
 
     def create_db(self):
         if not self.db_path.parent.exists():
-            self.db_path.parent.mkdir()
+            self.db_path.parent.mkdir(parents=True)
             logger.info(
                 f'created config directory {self.db_path.parent}'
             )
