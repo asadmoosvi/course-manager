@@ -41,6 +41,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                                 next_task=args.next)
     elif args.command == 'list':
         course_db.print_table()
+    else:
+        parser.print_help()
 
     return 0
 
