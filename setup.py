@@ -6,7 +6,7 @@ with open('README.md') as f:
 
 setuptools.setup(
     name="course-manager",
-    version="0.0.1",
+    version="0.0.2",
     author="Asad Moosvi",
     author_email="moosvi.asad@gmail.com",
     description="Keep track of the courses you're taking",
