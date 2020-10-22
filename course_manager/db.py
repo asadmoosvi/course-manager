@@ -6,7 +6,7 @@ from os import get_terminal_size
 
 logger = get_logger(__name__)
 
-DB = './config/test.db'
+DB = str(Path.home() / Path('.config/course-manager/course_manager.db'))
 
 
 class CourseDb:
