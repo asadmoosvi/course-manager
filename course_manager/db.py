@@ -18,7 +18,7 @@ class CourseDb:
     def db_exists(self) -> bool:
         return self.db_path.absolute().exists()
 
-    def create_db(self):
+    def create_db(self) -> None:
         if not self.db_path.parent.exists():
             self.db_path.parent.mkdir(parents=True)
             logger.info(
@@ -124,7 +124,7 @@ class CourseDb:
             results = cur.fetchall()
         return results
 
-    def print_table(self):
+    def print_table(self) -> None:
         terminal_width = get_terminal_size().columns
         print('[Courses]'.center(terminal_width))
         print('-' * terminal_width)
