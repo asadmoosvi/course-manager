@@ -38,11 +38,11 @@ class CourseDb:
         self.execute_query('''
             CREATE TRIGGER course_trig AFTER UPDATE ON course
             BEGIN
-                update course set timestamp = datetime('now')
+                update course set timestamp = datetime('now', 'localtime')
                 WHERE course_id = NEW.course_id;
             END;
         ''')
-        logger.info(f'db {self.db_path} created successfully')
+        logger.info(f'database {self.db_path} created successfully')
 
     def execute_query(
         self,
@@ -68,11 +68,18 @@ class CourseDb:
             INSERT INTO course (name, current_task, next_task)
             VALUES (?, ?, ?)
         ''', (name, current_task, next_task))
+        logger.info(f'Added course: {name}')
 
     def remove_course(self, course_id: str) -> None:
+        if not self.course_id_exists(course_id):
+            logger.info(f'Coud not find course with ID: {course_id}')
+            return
+
         self.execute_query('''
             DELETE FROM course WHERE course_id=?
         ''', (course_id,))
+
+        logger.info(f'Removed course with ID: {course_id}')
 
     def update_course(
         self,
@@ -93,6 +100,14 @@ class CourseDb:
             update_fields.append('next_task=?')
             update_values.append(next_task)
 
+        if not update_fields:
+            logger.info('Nothing updated')
+            return
+
+        if not self.course_id_exists(course_id):
+            logger.info(f'Could not find course with ID: {course_id}')
+            return
+
         update_values.append(course_id)
         query = f'''
             UPDATE course
@@ -100,6 +115,7 @@ class CourseDb:
             WHERE course_id=?
         '''
         self.execute_query(query, tuple(update_values))
+        logger.info(f'Updated course with ID: {course_id}')
 
     def fetch_all(self) -> List:
         with sqlite3.connect(self.db_path) as conn:
@@ -129,3 +145,13 @@ class CourseDb:
 
         if len(rows) == 0:
             logger.info('Empty Database')
+
+    def course_id_exists(self, course_id: str) -> bool:
+        found_course_id = False
+        rows = self.fetch_all()
+
+        for row in rows:
+            if str(row[0]) == course_id:
+                found_course_id = True
+                break
+        return found_course_id
