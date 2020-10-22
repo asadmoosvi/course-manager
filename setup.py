@@ -10,6 +10,7 @@ setuptools.setup(
     author="Asad Moosvi",
     author_email="moosvi.asad@gmail.com",
     description="Keep track of the courses you're taking",
+    url="https://github.com/asadmoosvi/course-manager",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
