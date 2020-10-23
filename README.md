@@ -27,6 +27,9 @@ optional arguments:
   -h, --help            show this help message and exit
 ```
 
+## asciinema example
+[![asciicast](https://asciinema.org/a/bUzn4Mrhz2Kk1eVcaGtkZSIp3.svg)](https://asciinema.org/a/bUzn4Mrhz2Kk1eVcaGtkZSIp3)
+
 ## list all courses
 `course_manager list`
 
