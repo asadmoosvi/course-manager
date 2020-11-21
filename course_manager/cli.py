@@ -18,7 +18,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     add_parser.add_argument('-c', '--current', help='Set current task')
     add_parser.add_argument('-n', '--next',  help='Set next task')
 
-    remove_parser.add_argument('course_id', help='Remove a course by ID')
+    remove_parser.add_argument('course_id', nargs='?',
+                               help='Remove a course by ID')
+    remove_parser.add_argument('-a', '--all', action='store_true',
+                               help='Remove all courses')
 
     update_parser.add_argument('course_id', help='ID of course to update')
     update_parser.add_argument('--name',
@@ -34,7 +37,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         course_db.add_course(name=args.name, current_task=args.current,
                              next_task=args.next)
     elif args.command == 'remove':
-        course_db.remove_course(args.course_id)
+        if args.all:
+            course_db.remove_course('ALL')
+        elif args.course_id:
+            course_db.remove_course(args.course_id)
+        else:
+            remove_parser.print_help()
     elif args.command == 'update':
         course_db.update_course(course_id=args.course_id, name=args.name,
                                 current_task=args.current,

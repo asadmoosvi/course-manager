@@ -71,15 +71,19 @@ class CourseDb:
         logger.info(f'Added course: {name}')
 
     def remove_course(self, course_id: str) -> None:
-        if not self.course_id_exists(course_id):
-            logger.info(f'Coud not find course with ID: {course_id}')
-            return
+        if course_id == 'ALL':
+            logger.info('Deleting all courses.')
+            self.execute_query('DELETE FROM course')
+            logger.info('All courses deleted successfully.')
+        else:
+            if not self.course_id_exists(course_id):
+                logger.info(f'Coud not find course with ID: {course_id}')
+                return
+            self.execute_query('''
+                DELETE FROM course WHERE course_id=?
+            ''', (course_id,))
 
-        self.execute_query('''
-            DELETE FROM course WHERE course_id=?
-        ''', (course_id,))
-
-        logger.info(f'Removed course with ID: {course_id}')
+            logger.info(f'Removed course with ID: {course_id}')
 
     def update_course(
         self,
