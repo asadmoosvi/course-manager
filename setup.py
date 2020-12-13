@@ -23,5 +23,5 @@ setuptools.setup(
     python_requires=">=3.6",
     entry_points={
         "console_scripts": ["course_manager=course_manager.cli:main"]
-    }
+    },
 )

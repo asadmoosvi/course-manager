@@ -21,9 +21,7 @@ class CourseDb:
     def create_db(self) -> None:
         if not self.db_path.parent.exists():
             self.db_path.parent.mkdir(parents=True)
-            logger.info(
-                f'created config directory {self.db_path.parent}'
-            )
+            logger.info(f'created config directory {self.db_path.parent}')
 
         create_query = '''
             CREATE TABLE course (
@@ -35,19 +33,19 @@ class CourseDb:
             );
         '''
         self.execute_query(create_query)
-        self.execute_query('''
+        self.execute_query(
+            '''
             CREATE TRIGGER course_trig AFTER UPDATE ON course
             BEGIN
                 update course set timestamp = datetime('now', 'localtime')
                 WHERE course_id = NEW.course_id;
             END;
-        ''')
+            '''
+        )
         logger.info(f'database {self.db_path} created successfully')
 
     def execute_query(
-        self,
-        query: str,
-        values: Optional[Tuple[Optional[str], ...]] = None
+        self, query: str, values: Optional[Tuple[Optional[str], ...]] = None
     ) -> None:
         with sqlite3.connect(self.db_path) as conn:
             cur = conn.cursor()
@@ -59,15 +57,15 @@ class CourseDb:
             cur.close()
 
     def add_course(
-        self,
-        name: str,
-        current_task: str = None,
-        next_task: str = None
+        self, name: str, current_task: str = None, next_task: str = None
     ) -> None:
-        self.execute_query('''
+        self.execute_query(
+            '''
             INSERT INTO course (name, current_task, next_task)
             VALUES (?, ?, ?)
-        ''', (name, current_task, next_task))
+            ''',
+            (name, current_task, next_task),
+        )
         logger.info(f'Added course: {name}')
 
     def remove_course(self, course_id: str) -> None:
@@ -82,9 +80,12 @@ class CourseDb:
             if not self.course_id_exists(course_id):
                 logger.info(f'Coud not find course with ID: {course_id}')
                 return
-            self.execute_query('''
+            self.execute_query(
+                '''
                 DELETE FROM course WHERE course_id=?
-            ''', (course_id,))
+                ''',
+                (course_id,),
+            )
 
             logger.info(f'Removed course with ID: {course_id}')
 
@@ -93,7 +94,7 @@ class CourseDb:
         course_id: str,
         name: str = None,
         current_task: str = None,
-        next_task: str = None
+        next_task: str = None,
     ) -> None:
         update_fields = []
         update_values = []
@@ -137,8 +138,11 @@ class CourseDb:
         print('-' * terminal_width)
         field_width = terminal_width // 5
         headings = [
-            'Course ID', 'Last Modified', 'Name',
-            'Current Task', 'Next Task'
+            'Course ID',
+            'Last Modified',
+            'Name',
+            'Current Task',
+            'Next Task',
         ]
         for heading in headings:
             print(f'[{heading}]'.ljust(field_width), end='')

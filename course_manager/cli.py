@@ -16,33 +16,34 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     remove_parser = subparsers.add_parser('remove', help='Remove a course')
     update_parser = subparsers.add_parser('update', help='Update a course')
     list_parser = subparsers.add_parser('list', help='List courses')
-    help_parser = subparsers.add_parser('help',
-                                        help='Display help for a command')
+    help_parser = subparsers.add_parser(
+        'help', help='Display help for a command'
+    )
 
     add_parser.add_argument('name', help='Name of the course')
     add_parser.add_argument('-c', '--current', help='Set current task')
-    add_parser.add_argument('-n', '--next',  help='Set next task')
+    add_parser.add_argument('-n', '--next', help='Set next task')
 
-    remove_parser.add_argument('course_id', nargs='?',
-                               help='Remove a course by ID')
-    remove_parser.add_argument('-a', '--all', action='store_true',
-                               help='Remove all courses')
+    remove_parser.add_argument(
+        'course_id', nargs='?', help='Remove a course by ID'
+    )
+    remove_parser.add_argument(
+        '-a', '--all', action='store_true', help='Remove all courses'
+    )
 
     update_parser.add_argument('course_id', help='ID of course to update')
-    update_parser.add_argument('--name',
-                               help='Name of the updated course')
-    update_parser.add_argument('-c', '--current',
-                               help='New current task')
-    update_parser.add_argument('-n', '--next',
-                               help='New next task')
+    update_parser.add_argument('--name', help='Name of the updated course')
+    update_parser.add_argument('-c', '--current', help='New current task')
+    update_parser.add_argument('-n', '--next', help='New next task')
 
     help_parser.add_argument('cmd', help='command name to get help for')
 
     args = parser.parse_args(argv)
     course_db = CourseDb(DB)
     if args.command == 'add':
-        course_db.add_course(name=args.name, current_task=args.current,
-                             next_task=args.next)
+        course_db.add_course(
+            name=args.name, current_task=args.current, next_task=args.next
+        )
     elif args.command == 'remove':
         if args.all:
             course_db.remove_course('ALL')
@@ -51,9 +52,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         else:
             remove_parser.print_help()
     elif args.command == 'update':
-        course_db.update_course(course_id=args.course_id, name=args.name,
-                                current_task=args.current,
-                                next_task=args.next)
+        course_db.update_course(
+            course_id=args.course_id,
+            name=args.name,
+            current_task=args.current,
+            next_task=args.next,
+        )
     elif args.command == 'list':
         course_db.print_table()
     elif args.command == 'help':
