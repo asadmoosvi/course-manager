@@ -74,6 +74,9 @@ class CourseDb:
         if course_id == 'ALL':
             logger.info('Deleting all courses.')
             self.execute_query('DELETE FROM course')
+            self.execute_query(
+                "DELETE from sqlite_sequence WHERE name='course'"
+            )
             logger.info('All courses deleted successfully.')
         else:
             if not self.course_id_exists(course_id):
