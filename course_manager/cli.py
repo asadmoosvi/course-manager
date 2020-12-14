@@ -1,11 +1,23 @@
 import argparse
 import sys
+import os
 from course_manager.db import CourseDb
 from course_manager.db import DB
 from course_manager.logger import get_logger
 from typing import Optional, Sequence
+from shutil import copyfile
 
 logger = get_logger(__name__)
+
+
+def backup_db(name: Optional[str] = None) -> None:
+    logger.info('backing up database')
+    dest_filename = os.path.basename(DB)
+    if name is not None:
+        dest_filename = f'{name}.db'
+    logger.info(f'copying database file to ./{dest_filename}')
+    dest_filename = os.path.join(os.getcwd(), dest_filename)
+    copyfile(DB, dest_filename)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -19,6 +31,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     help_parser = subparsers.add_parser(
         'help', help='Display help for a command'
     )
+    backup_parser = subparsers.add_parser('backup', help='Backup courses database')
 
     add_parser.add_argument('name', help='Name of the course')
     add_parser.add_argument('-c', '--current', help='Set current task')
@@ -38,6 +51,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     help_parser.add_argument('cmd', help='command name to get help for')
 
+    backup_parser.add_argument(
+        '-n', '--name', help='database name to backup to'
+    )
     args = parser.parse_args(argv)
     course_db = CourseDb(DB)
     if args.command == 'add':
@@ -60,6 +76,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         )
     elif args.command == 'list':
         course_db.print_table()
+    elif args.command == 'backup':
+        backup_db(name=args.name)
     elif args.command == 'help':
         if args.cmd in subparsers.choices:
             subparsers.choices[args.cmd].print_help()
