@@ -21,8 +21,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     help_parser = subparsers.add_parser(
         'help', help='Display help for a command'
     )
-    backup_parser = subparsers.add_parser('backup', help='Backup courses database')
-    import_parser = subparsers.add_parser('import', help='Import courses database')
+    backup_parser = subparsers.add_parser(
+        'backup', help='Backup courses database'
+    )
+    import_parser = subparsers.add_parser(
+        'import', help='Import courses database'
+    )
 
     add_parser.add_argument('name', help='Name of the course')
     add_parser.add_argument('-c', '--current', help='Set current task')
