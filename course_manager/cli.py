@@ -3,6 +3,7 @@ import sys
 import os
 from course_manager.db import CourseDb
 from course_manager.db import DB
+from course_manager.utils import import_db
 from course_manager.logger import get_logger
 from typing import Optional, Sequence
 from shutil import copyfile
@@ -32,6 +33,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         'help', help='Display help for a command'
     )
     backup_parser = subparsers.add_parser('backup', help='Backup courses database')
+    import_parser = subparsers.add_parser('import', help='Import courses database')
 
     add_parser.add_argument('name', help='Name of the course')
     add_parser.add_argument('-c', '--current', help='Set current task')
@@ -54,6 +56,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     backup_parser.add_argument(
         '-n', '--name', help='database name to backup to'
     )
+
+    import_parser.add_argument('db', help='database file path')
+
     args = parser.parse_args(argv)
     course_db = CourseDb(DB)
     if args.command == 'add':
@@ -78,6 +83,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         course_db.print_table()
     elif args.command == 'backup':
         backup_db(name=args.name)
+    elif args.command == 'import':
+        import_db(args.db)
     elif args.command == 'help':
         if args.cmd in subparsers.choices:
             subparsers.choices[args.cmd].print_help()
