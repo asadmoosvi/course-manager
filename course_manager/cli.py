@@ -1,24 +1,13 @@
 import argparse
 import sys
-import os
 from course_manager.db import CourseDb
 from course_manager.db import DB
 from course_manager.utils import import_db
+from course_manager.utils import backup_db
 from course_manager.logger import get_logger
 from typing import Optional, Sequence
-from shutil import copyfile
 
 logger = get_logger(__name__)
-
-
-def backup_db(name: Optional[str] = None) -> None:
-    logger.info('backing up database')
-    dest_filename = os.path.basename(DB)
-    if name is not None:
-        dest_filename = f'{name}.db'
-    logger.info(f'copying database file to ./{dest_filename}')
-    dest_filename = os.path.join(os.getcwd(), dest_filename)
-    copyfile(DB, dest_filename)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
